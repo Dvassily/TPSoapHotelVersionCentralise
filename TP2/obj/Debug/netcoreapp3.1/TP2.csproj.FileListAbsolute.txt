@@ -1,0 +1,11 @@
+C:\Users\dalie\OneDrive\Documents\ArchitectureDistribuees\TP2\obj\Debug\netcoreapp3.1\TP2.csprojAssemblyReference.cache
+C:\Users\dalie\OneDrive\Documents\ArchitectureDistribuees\TP2\obj\Debug\netcoreapp3.1\TP2.AssemblyInfoInputs.cache
+C:\Users\dalie\OneDrive\Documents\ArchitectureDistribuees\TP2\obj\Debug\netcoreapp3.1\TP2.AssemblyInfo.cs
+C:\Users\dalie\OneDrive\Documents\ArchitectureDistribuees\TP2\bin\Debug\netcoreapp3.1\TP2.exe
+C:\Users\dalie\OneDrive\Documents\ArchitectureDistribuees\TP2\bin\Debug\netcoreapp3.1\TP2.deps.json
+C:\Users\dalie\OneDrive\Documents\ArchitectureDistribuees\TP2\bin\Debug\netcoreapp3.1\TP2.runtimeconfig.json
+C:\Users\dalie\OneDrive\Documents\ArchitectureDistribuees\TP2\bin\Debug\netcoreapp3.1\TP2.runtimeconfig.dev.json
+C:\Users\dalie\OneDrive\Documents\ArchitectureDistribuees\TP2\bin\Debug\netcoreapp3.1\TP2.dll
+C:\Users\dalie\OneDrive\Documents\ArchitectureDistribuees\TP2\bin\Debug\netcoreapp3.1\TP2.pdb
+C:\Users\dalie\OneDrive\Documents\ArchitectureDistribuees\TP2\obj\Debug\netcoreapp3.1\TP2.dll
+C:\Users\dalie\OneDrive\Documents\ArchitectureDistribuees\TP2\obj\Debug\netcoreapp3.1\TP2.pdb
