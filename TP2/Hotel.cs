@@ -7,6 +7,7 @@ namespace TP2
 {
     class Hotel
 	{
+		public int Id { get; set; }
 		public string Nom { get; set; }
 		public string Pays { get; set; }
 		public string Ville { get; set; }
@@ -28,8 +29,9 @@ namespace TP2
 
 		private int _CompteurChambres = 0;
 
-		public Hotel(string nom, string pays, string ville, string rue, int numero, int nbetoile)
+		public Hotel(int id, string nom, string pays, string ville, string rue, int numero, int nbetoile)
 		{
+			Id = id;
 			Nom = nom;
 			Pays = pays;
 			Ville = ville;
@@ -40,7 +42,9 @@ namespace TP2
 
 		public void AjouterChambre(int nblit, double prix, double surface)
 		{
-			_Chambres.Add(CompteurChambres, new Chambre(this, nblit, prix, surface));
+			int _Id = CompteurChambres;
+
+			_Chambres.Add(_Id, new Chambre(this, _Id, nblit, prix, surface));
 		}
 	}
 }

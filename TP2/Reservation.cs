@@ -7,25 +7,16 @@ namespace TP2
 {
     class Reservation
     {
-        public static string CompteurReservations
-        {
-            get
-            {
-                return (_CompteurReservations++).ToString();
-            }
-        }
-
-        private static int _CompteurReservations = 0;
         public DateTime DateDepart { get; set; }
         public DateTime DateArrivee { get; set; }
-        public string NumReservation { get; set; }
+        public int NumReservation { get; set; }
         public Chambre ChambreReservation { get; set; }
         public Client ClientReservation { get; set; }
-        public Reservation (DateTime dateDepart, DateTime dateArrivee, string numreservation, Chambre chambre, Client client) 
+        public Reservation (int numreservation, DateTime dateDepart, DateTime dateArrivee, Chambre chambre, Client client)
         {
+            NumReservation = numreservation;
             DateDepart = dateDepart;
             DateArrivee = dateArrivee;
-            NumReservation = numreservation;
             ChambreReservation = chambre;
             ClientReservation = client;
         }

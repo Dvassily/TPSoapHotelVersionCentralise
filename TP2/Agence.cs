@@ -7,10 +7,25 @@ namespace TP2
 {
     class Agence
     {
+        private Dictionary<int, Reservation> _Reservations = new Dictionary<int, Reservation>();
+        public List<Reservation> Reservations
+        {
+            get
+            {
+                return new List<Reservation>(_Reservations.Values);
+            }
+        }
+        public int CompteurReservations
+        {
+            get
+            {
+                return _CompteurReservations++;
+            }
+        }
+
+        private int _CompteurReservations = 0;
 
         private Dictionary<int, Hotel> _Hotels = new Dictionary<int, Hotel>();
-        private List<Reservation> Reservations = new List<Reservation>();
-
         public List<Hotel> Hotels
         {
             get
@@ -28,10 +43,39 @@ namespace TP2
 
         private int _CompteurHotels = 0;
 
-        public void AjouterHotel(Hotel hotel) 
+        private Dictionary<int, Client> _Clients = new Dictionary<int, Client>();
+        public List<Client> Clients
         {
-            _Hotels.Add(CompteurHotels, hotel);
-        } 
+            get
+            {
+                return new List<Client>(_Clients.Values);
+            }
+        }
+        public int CompteurClients
+        {
+            get
+            {
+                return _CompteurClients++;
+            }
+        }
+
+        private int _CompteurClients = 0;
+
+        public int AjouterHotel(string nom, string pays, string ville, string rue, int numero, int nbetoile) 
+        {
+            int id = CompteurHotels;
+
+            _Hotels.Add(id, new Hotel(id, nom, pays, ville, rue, numero, nbetoile));
+
+            return id;
+        }
+
+        public void AjouterChambre(int hotelId, int nblit, double prix, double surface)
+        {
+            Hotel hotel = _Hotels[hotelId];
+
+            hotel.AjouterChambre(nblit, prix, surface);
+        }
 
         public List<Chambre> Rechercher (string villeSejour, DateTime dateDepart, DateTime dateArrivee, double prixmin, double prixmax, int nbetoile, int nbpersonne)
         {
@@ -55,16 +99,26 @@ namespace TP2
             return resultats;
         }
 
-        public Reservation Reserver(string nom, string prenom, string numerocarte, int hotelId, int chambreId, DateTime dateDepart, DateTime dateArrivee)
+        public int Reserver(int clientId, int hotelId, int chambreId, DateTime dateDepart, DateTime dateArrivee)
         {
-            Client client = new Client(nom, prenom, numerocarte);
+            int id = CompteurReservations;
+            Client client = _Clients[clientId];
             Chambre chambre = Hotels[hotelId].Chambres[chambreId];
-            Reservation reservation = new Reservation(dateDepart, dateArrivee, Reservation.CompteurReservations, chambre, client);
 
-            Reservations.Add(reservation);
+            _Reservations.Add(id, new Reservation(id, dateDepart, dateArrivee, chambre, client));
 
-            return reservation;
+            return id;
         }
+
+        public int EnregistrerClient(string nom, string prenom, string numeroCarte)
+        {
+            int Id = CompteurClients;
+
+            _Clients[Id] = new Client(nom, prenom, numeroCarte);
+
+            return Id;
+        }
+
 
         private bool HotelCorrespond(Hotel hotel, string villeSejour, int nbetoile)
         {
@@ -111,6 +165,5 @@ namespace TP2
 
             return true;
         }
-
     }
 }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\dalie\\OneDrive\\Documents\\ArchitectureDistribuees\\TP2\\TP2.csproj": {}
+    "C:\\Users\\dalie\\Source\\Repos\\Dvassily\\TPSoapHotelVersionCentralise\\TP2\\TP2.csproj": {}
   },
   "projects": {
-    "C:\\Users\\dalie\\OneDrive\\Documents\\ArchitectureDistribuees\\TP2\\TP2.csproj": {
+    "C:\\Users\\dalie\\Source\\Repos\\Dvassily\\TPSoapHotelVersionCentralise\\TP2\\TP2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dalie\\OneDrive\\Documents\\ArchitectureDistribuees\\TP2\\TP2.csproj",
+        "projectUniqueName": "C:\\Users\\dalie\\Source\\Repos\\Dvassily\\TPSoapHotelVersionCentralise\\TP2\\TP2.csproj",
         "projectName": "TP2",
-        "projectPath": "C:\\Users\\dalie\\OneDrive\\Documents\\ArchitectureDistribuees\\TP2\\TP2.csproj",
+        "projectPath": "C:\\Users\\dalie\\Source\\Repos\\Dvassily\\TPSoapHotelVersionCentralise\\TP2\\TP2.csproj",
         "packagesPath": "C:\\Users\\dalie\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dalie\\OneDrive\\Documents\\ArchitectureDistribuees\\TP2\\obj\\",
+        "outputPath": "C:\\Users\\dalie\\Source\\Repos\\Dvassily\\TPSoapHotelVersionCentralise\\TP2\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dalie\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -3,22 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-// string villeSejour, DateTime dateDepart, DateTime dateArrivee, double prixmin, double prixmax, int nbetoile, int nbpersonne
 namespace TP2
 {
     class Program
     {
         private const string CHAINE_IGNORER = "*";
         private const string CHAINE_VILLE_SEJOUR = "Ville de séjour";
-        private const string CHAINE_VILLE_DEPART = "Date de départ";
-        private const string CHAINE_VILLE_ARRIVEE = "Date d'arrivée";
+        private const string CHAINE_DATE_DEPART = "Date de départ";
+        private const string CHAINE_DATE_ARRIVEE = "Date d'arrivée";
         private const string CHAINE_PRIX_MINIMAL = "Prix minimal";
         private const string CHAINE_PRIX_MAXIMAL = "Prix maximal";
         private const string CHAINE_NOMBRE_ETOILE = "Nombre d'etoile";
         private const string CHAINE_NOMBRE_PERSONNE = "Nombre de personnes";
-        private const string CHAINE_ANNEE = "Année";
-        private const string CHAINE_MOIS = "Mois";
-        private const string CHAINE_JOUR = "Jour";
+        private const string CHAINE_ANNEE = "Année format YYYY";
+        private const string CHAINE_MOIS = "Mois format MM";
+        private const string CHAINE_JOUR = "Jour format DD";
         private const string CHAINE_RESULTAT_HOTEL = "Hotel : ";
         private const string CHAINE_RESULTAT_VILLE = "Ville : ";
         private const string CHAINE_RESULTAT_RUE = "Rue : ";
@@ -31,6 +30,12 @@ namespace TP2
                                            "2) Réserver\n" +
                                            "3) Quitter\n" +
                                            "> ";
+        private const string CHAINE_IDENTIFIANT_HOTEL = "Identifiant hotel : ";
+        private const string CHAINE_IDENTIFIANT_CHAMBRE = "Identifiant chambre : ";
+        private const string CHAINE_NOM_CLIENT = "Nom";
+        private const string CHAINE_PRENOM_CLIENT = "Prenom";
+        private const string CHAINE_NUMERO_CARTE_BANCAIRE = "Numero de carte bancaire";
+        private const string CHAINE_NUMERO_RESERVATION = "Numéro de reservation : ";
 
         private static Agence Agence { get; } = new Agence();
 
@@ -44,13 +49,22 @@ namespace TP2
             return false;
         }
 
-        private static string SaisirChaine(string libelle)
+        private static string SaisirChaine(string libelle, bool demanderIgnorer)
         {
-            Console.WriteLine(libelle + CHAINE_POUR_IGNORER);
+            string affichage = libelle;
+
+            if (demanderIgnorer)
+            {
+                affichage += CHAINE_POUR_IGNORER;
+            }
+
+            affichage += " : ";
+
+            Console.WriteLine(affichage);
 
             string chaine = Console.ReadLine();
 
-            if (verifierIgnorer(chaine))
+            if (demanderIgnorer && verifierIgnorer(chaine))
             {
                 return null;
             }
@@ -58,9 +72,18 @@ namespace TP2
             return chaine;
         }
 
-        private static int SaisirEntierPositif(string libelle)
+        private static int SaisirEntierPositif(string libelle, bool demanderIgnorer)
         {
-            Console.WriteLine(libelle + CHAINE_POUR_IGNORER);
+            string affichage = libelle;
+
+            if (demanderIgnorer)
+            {
+                affichage += CHAINE_POUR_IGNORER;
+            }
+
+            affichage += " : ";
+
+            Console.WriteLine(affichage);
 
             string entier = Console.ReadLine();
 
@@ -72,52 +95,64 @@ namespace TP2
             return Int32.Parse(entier);
         }
 
-        private static DateTime SaisirDate(string libelle)
+        private static DateTime SaisirDate(string libelle, bool demanderIgnorer)
         {
             Console.WriteLine(libelle + " : ");
-            int year = SaisirEntierPositif(CHAINE_ANNEE);
+            int year = SaisirEntierPositif(CHAINE_ANNEE, demanderIgnorer);
             if (year == -1)
             {
                 return default;
             }
-            int month = SaisirEntierPositif(CHAINE_MOIS);
-            int day = SaisirEntierPositif(CHAINE_JOUR);
+            int month = SaisirEntierPositif(CHAINE_MOIS, demanderIgnorer);
+            int day = SaisirEntierPositif(CHAINE_JOUR, demanderIgnorer);
 
             return new DateTime(year, month, day);
         }
 
         private static void MenuRechercher()
         {
-            string villeSejour = SaisirChaine(CHAINE_VILLE_SEJOUR);
-            DateTime dateDepart = SaisirDate(CHAINE_VILLE_DEPART);
-            DateTime dateArrivee = SaisirDate(CHAINE_VILLE_ARRIVEE);
-            double prixMin = SaisirEntierPositif(CHAINE_PRIX_MINIMAL);
-            double prixMax = SaisirEntierPositif(CHAINE_PRIX_MAXIMAL);
-            int nbEtoile = SaisirEntierPositif(CHAINE_NOMBRE_ETOILE);
-            int nbPersonne = SaisirEntierPositif(CHAINE_NOMBRE_PERSONNE);
+            string villeSejour = SaisirChaine(CHAINE_VILLE_SEJOUR, true);
+            DateTime dateDepart = SaisirDate(CHAINE_DATE_DEPART, true);
+            DateTime dateArrivee = SaisirDate(CHAINE_DATE_ARRIVEE, true);
+            double prixMin = SaisirEntierPositif(CHAINE_PRIX_MINIMAL, true);
+            double prixMax = SaisirEntierPositif(CHAINE_PRIX_MAXIMAL, true);
+            int nbEtoile = SaisirEntierPositif(CHAINE_NOMBRE_ETOILE, true);
+            int nbPersonne = SaisirEntierPositif(CHAINE_NOMBRE_PERSONNE, true);
 
             List<Chambre> chambres = Agence.Rechercher(villeSejour, dateDepart, dateArrivee, prixMin, prixMax, nbEtoile, nbPersonne);
 
             for (int i = 0; i < chambres.Count; ++i)
             {
-                Console.WriteLine(i + ")");
                 AfficherResultat(chambres[i]);
-                Console.WriteLine();
             }
         }
 
         private static void AfficherResultat(Chambre chambre)
         {
+            Console.WriteLine(CHAINE_IDENTIFIANT_HOTEL + chambre.Hotel.Id);
+            Console.WriteLine(CHAINE_IDENTIFIANT_CHAMBRE + chambre.Id);
             Console.WriteLine(CHAINE_RESULTAT_HOTEL + chambre.Hotel.Nom);
             Console.WriteLine(CHAINE_RESULTAT_VILLE + chambre.Hotel.Ville);
             Console.WriteLine(CHAINE_RESULTAT_RUE + chambre.Hotel.Rue);
             Console.WriteLine(CHAINE_RESULTAT_PRIX + chambre.Prix);
             Console.WriteLine(CHAINE_RESULTAT_NOMBRE_LIT + chambre.Nblit);
+            Console.WriteLine();
         }
 
         private static void MenuReserver()
         {
-            throw new NotImplementedException();
+            int hotelId = SaisirEntierPositif(CHAINE_IDENTIFIANT_HOTEL, false);
+            int chambreId = SaisirEntierPositif(CHAINE_IDENTIFIANT_CHAMBRE, false);
+            string nom = SaisirChaine(CHAINE_NOM_CLIENT, false);
+            string prenom = SaisirChaine(CHAINE_PRENOM_CLIENT, false);
+            string numeroCarte = SaisirChaine(CHAINE_NUMERO_CARTE_BANCAIRE, false);
+            DateTime dateDepart = SaisirDate(CHAINE_DATE_DEPART, false);
+            DateTime dateArrivee = SaisirDate(CHAINE_DATE_ARRIVEE, false);
+
+            int clientId = Agence.EnregistrerClient(nom, prenom, numeroCarte);
+            int numeroReservation = Agence.Reserver(clientId, hotelId, chambreId, dateDepart, dateArrivee);
+
+            Console.WriteLine(CHAINE_NUMERO_RESERVATION + numeroReservation);
         }
 
         public static bool AfficherMenu()
@@ -145,16 +180,13 @@ namespace TP2
 
         static void Main(string[] args)
         {
-            Hotel hotel1 = new Hotel("hilton", "france", "montpellier", "av", 75, 3);
-            Hotel hotel2 = new Hotel("george", "usa", "losangeles", "street", 2, 5);
-            hotel1.AjouterChambre(3, 80, 20);
-            hotel1.AjouterChambre(5, 100, 50);
-            hotel1.AjouterChambre(2, 60, 40);
-            hotel2.AjouterChambre(3, 100, 40);
-            hotel2.AjouterChambre(1, 35, 100);
-
-            Agence.AjouterHotel(hotel1);
-            Agence.AjouterHotel(hotel2);
+            int hotel1Id = Agence.AjouterHotel("hilton", "france", "montpellier", "av", 75, 3);
+            int hotel2Id = Agence.AjouterHotel("gheorge", "usa", "losangeles", "street", 2, 5);
+            Agence.AjouterChambre(hotel1Id, 3, 80, 20);
+            Agence.AjouterChambre(hotel1Id, 5, 100, 50);
+            Agence.AjouterChambre(hotel1Id, 2, 60, 40);
+            Agence.AjouterChambre(hotel2Id, 3, 100, 40);
+            Agence.AjouterChambre(hotel2Id, 1, 35, 100);
 
             bool continuer = true;
 
