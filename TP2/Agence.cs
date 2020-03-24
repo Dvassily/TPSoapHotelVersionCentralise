@@ -77,7 +77,7 @@ namespace TP2
             hotel.AjouterChambre(nblit, prix, surface);
         }
 
-        public List<Chambre> Rechercher (string villeSejour, DateTime dateDepart, DateTime dateArrivee, double prixmin, double prixmax, int nbetoile, int nbpersonne)
+        public List<Chambre> Rechercher (string villeSejour, DateTime dateArrivee, DateTime dateDepart,  double prixmin, double prixmax, int nbetoile, int nbpersonne)
         {
             List<Chambre> resultats = new List<Chambre>();
 
@@ -87,7 +87,7 @@ namespace TP2
                 {
                     foreach (Chambre chambre in hotel.Chambres)
                     {
-                        if (ChambreCorrespond(chambre, dateDepart, dateArrivee, prixmin, prixmax, nbpersonne))
+                        if (ChambreCorrespond(chambre, dateArrivee, dateDepart, prixmin, prixmax, nbpersonne))
                         {
                             resultats.Add(chambre);
                         }
@@ -99,16 +99,37 @@ namespace TP2
             return resultats;
         }
 
-        public int Reserver(int clientId, int hotelId, int chambreId, DateTime dateDepart, DateTime dateArrivee)
+        public int Reserver(int clientId, int hotelId, int chambreId, DateTime dateArrivee, DateTime dateDepart)
         {
             int id = CompteurReservations;
             Client client = _Clients[clientId];
             Chambre chambre = Hotels[hotelId].Chambres[chambreId];
 
-            _Reservations.Add(id, new Reservation(id, dateDepart, dateArrivee, chambre, client));
+            if (! chambre.estDisponible(dateArrivee, dateDepart))
+            {
+                throw new ChambreNonDisponibleException(hotelId, chambreId, dateArrivee, dateDepart);
+            }
+
+            Reservation reservation = new Reservation(id, dateArrivee, dateDepart, chambre, client);
+            _Reservations.Add(id, reservation);
+            chambre.Reservations.Add(reservation);
 
             return id;
         }
+
+        public string ConsulterReservation(int numeroReservation)
+        {
+            Reservation reservation = _Reservations[numeroReservation];
+
+            string resultat = "Réservation " + numeroReservation + " : \n";
+            resultat += "* Client : " + reservation.ClientReservation.Nom + " " + reservation.ClientReservation.Prenom + "\n";
+            resultat += "* Hotel : " + reservation.ChambreReservation.Hotel.Nom + "\n";
+            resultat += "* Chambre : " + reservation.ChambreReservation.Nblit + " lits\n";
+            resultat += "* Prix : " + reservation.ChambreReservation.Prix + "€\n";
+
+            return resultat;            
+        }
+
 
         public int EnregistrerClient(string nom, string prenom, string numeroCarte)
         {
@@ -124,42 +145,36 @@ namespace TP2
         {
             if (villeSejour != null && hotel.Ville.IndexOf(villeSejour) == -1)
             {
-                Console.WriteLine("villeSejour");
                 return false;
             }
 
             if (nbetoile != -1 && hotel.Nbetoile != nbetoile)
             {
-                Console.WriteLine("Nbetoile");
                 return false;
             }
 
             return true;
         }
 
-        private bool ChambreCorrespond(Chambre chambre, DateTime dateDepart, DateTime dateArrivee, double prixmin, double prixmax, int nbpersonne)
+        private bool ChambreCorrespond(Chambre chambre, DateTime dateArrivee, DateTime dateDepart, double prixmin, double prixmax, int nbpersonne)
         {
-            if (! chambre.estDisponible(dateDepart, dateArrivee))
+            if (! chambre.estDisponible(dateArrivee, dateDepart))
             {
-                Console.WriteLine("date");
                 return false;
             }
 
             if (prixmin != -1 && chambre.Prix < prixmin)
             {
-                Console.WriteLine("prixmin");
                 return false;
             }
 
             if (prixmax != -1 && chambre.Prix > prixmax)
             {
-                Console.WriteLine("prixmax");
                 return false;
             }
 
             if (nbpersonne != -1 && chambre.Nblit < nbpersonne)
             {
-                Console.WriteLine("lit");
                 return false;
             }
 

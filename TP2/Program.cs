@@ -24,11 +24,12 @@ namespace TP2
         private const string CHAINE_RESULTAT_PRIX = "Prix : ";
         private const string CHAINE_RESULTAT_NOMBRE_LIT = "Nombre de lit : ";
         private const string CHAINE_CHOIX_INVALIDE = "Choix invalide";
-        private const string CHAINE_POUR_IGNORER = "(* pour ignorer) : ";
+        private const string CHAINE_POUR_IGNORER = " (* pour ignorer) : ";
         private const string CHAINE_MENU = "Choix : \n" +
                                            "1) Rechercher\n" +
                                            "2) Réserver\n" +
-                                           "3) Quitter\n" +
+                                           "3) Consulter une réservation\n" +
+                                           "4) Quitter\n" +
                                            "> ";
         private const string CHAINE_IDENTIFIANT_HOTEL = "Identifiant hotel : ";
         private const string CHAINE_IDENTIFIANT_CHAMBRE = "Identifiant chambre : ";
@@ -112,14 +113,28 @@ namespace TP2
         private static void MenuRechercher()
         {
             string villeSejour = SaisirChaine(CHAINE_VILLE_SEJOUR, true);
-            DateTime dateDepart = SaisirDate(CHAINE_DATE_DEPART, true);
             DateTime dateArrivee = SaisirDate(CHAINE_DATE_ARRIVEE, true);
+            DateTime dateDepart = DateTime.MaxValue;
+
+            if (dateArrivee != default)
+            {
+                dateDepart = SaisirDate(CHAINE_DATE_DEPART, true);
+            } else
+            {
+                dateArrivee = DateTime.MinValue;
+            }
+
+            if (dateArrivee > dateDepart)
+            {
+                throw new PeriodeInvalideException(dateArrivee, dateDepart);
+            }
+
             double prixMin = SaisirEntierPositif(CHAINE_PRIX_MINIMAL, true);
             double prixMax = SaisirEntierPositif(CHAINE_PRIX_MAXIMAL, true);
             int nbEtoile = SaisirEntierPositif(CHAINE_NOMBRE_ETOILE, true);
             int nbPersonne = SaisirEntierPositif(CHAINE_NOMBRE_PERSONNE, true);
 
-            List<Chambre> chambres = Agence.Rechercher(villeSejour, dateDepart, dateArrivee, prixMin, prixMax, nbEtoile, nbPersonne);
+            List<Chambre> chambres = Agence.Rechercher(villeSejour, dateArrivee, dateDepart, prixMin, prixMax, nbEtoile, nbPersonne);
 
             for (int i = 0; i < chambres.Count; ++i)
             {
@@ -146,13 +161,28 @@ namespace TP2
             string nom = SaisirChaine(CHAINE_NOM_CLIENT, false);
             string prenom = SaisirChaine(CHAINE_PRENOM_CLIENT, false);
             string numeroCarte = SaisirChaine(CHAINE_NUMERO_CARTE_BANCAIRE, false);
-            DateTime dateDepart = SaisirDate(CHAINE_DATE_DEPART, false);
             DateTime dateArrivee = SaisirDate(CHAINE_DATE_ARRIVEE, false);
+            DateTime dateDepart = SaisirDate(CHAINE_DATE_DEPART, false);
+
+            if (dateArrivee > dateDepart)
+            {
+                throw new PeriodeInvalideException(dateArrivee, dateDepart);
+            }
 
             int clientId = Agence.EnregistrerClient(nom, prenom, numeroCarte);
-            int numeroReservation = Agence.Reserver(clientId, hotelId, chambreId, dateDepart, dateArrivee);
+            int numeroReservation = Agence.Reserver(clientId, hotelId, chambreId, dateArrivee, dateDepart);
 
             Console.WriteLine(CHAINE_NUMERO_RESERVATION + numeroReservation);
+
+        }
+
+        private static void MenuConsulterReservation()
+        {
+            int numeroReservation = SaisirEntierPositif(CHAINE_NUMERO_RESERVATION, false);
+
+            string chaineReservation = Agence.ConsulterReservation(numeroReservation);
+
+            Console.WriteLine(chaineReservation);
         }
 
         public static bool AfficherMenu()
@@ -169,8 +199,12 @@ namespace TP2
                 MenuReserver();
             } else if (choix == 3)
             {
+                MenuConsulterReservation();
+            } else if (choix == 4)
+            {
                 return false;
-            } else
+            }
+            else
             {
                 Console.WriteLine(CHAINE_CHOIX_INVALIDE);
             }
@@ -192,7 +226,15 @@ namespace TP2
 
             do
             {
-                continuer = AfficherMenu();
+                try {
+                    continuer = AfficherMenu();
+                } catch (ChambreNonDisponibleException e)
+                {
+                    Console.WriteLine("Erreur : " + e.Message);
+                } catch (PeriodeInvalideException e)
+                {
+                    Console.WriteLine("Erreur : " + e.Message);
+                }
             } while (continuer);
         }
     }

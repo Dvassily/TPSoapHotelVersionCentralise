@@ -13,7 +13,7 @@ namespace TP2
         public double Prix { get; set; }
         public double Surface { get; set; }
 
-        private List<Reservation> reservations = new List<Reservation>();
+        public List<Reservation> Reservations { get; } = new List<Reservation>();
 
         public Chambre (Hotel hotel, int id, int nblit, double prix, double surface)
         {
@@ -25,26 +25,13 @@ namespace TP2
         }
 
 
-        public bool estDisponible(DateTime dateDepart, DateTime dateArrivee)
+        public bool estDisponible(DateTime dateArrivee, DateTime dateDepart)
         {
             bool disponible = true;
 
-            foreach (Reservation reservation in reservations)
+            foreach (Reservation reservation in Reservations)
             {
-                bool dateDepartOk = true;
-                bool dateArriveeOk = true;
-
-                if (dateDepart != default && dateDepart <= reservation.DateDepart)
-                {
-                    dateDepartOk = false;
-                }
-
-                if (dateArrivee != default && dateArrivee >= reservation.DateArrivee)
-                {
-                    dateArriveeOk = false;
-                }
-
-                if (! dateDepartOk || ! dateArriveeOk)
+                if (dateDepart >= reservation.DateArrivee && dateArrivee <= reservation.DateDepart)
                 {
                     disponible = false;
                 }
