@@ -31,12 +31,12 @@ namespace TP2
                                            "3) Consulter une réservation\n" +
                                            "4) Quitter\n" +
                                            "> ";
-        private const string CHAINE_IDENTIFIANT_HOTEL = "Identifiant hotel : ";
-        private const string CHAINE_IDENTIFIANT_CHAMBRE = "Identifiant chambre : ";
+        private const string CHAINE_IDENTIFIANT_HOTEL = "Identifiant hotel";
+        private const string CHAINE_IDENTIFIANT_CHAMBRE = "Identifiant chambre";
         private const string CHAINE_NOM_CLIENT = "Nom";
         private const string CHAINE_PRENOM_CLIENT = "Prenom";
         private const string CHAINE_NUMERO_CARTE_BANCAIRE = "Numero de carte bancaire";
-        private const string CHAINE_NUMERO_RESERVATION = "Numéro de reservation : ";
+        private const string CHAINE_NUMERO_RESERVATION = "Numéro de reservation";
 
         private static Agence Agence { get; } = new Agence();
 
@@ -144,8 +144,8 @@ namespace TP2
 
         private static void AfficherResultat(Chambre chambre)
         {
-            Console.WriteLine(CHAINE_IDENTIFIANT_HOTEL + chambre.Hotel.Id);
-            Console.WriteLine(CHAINE_IDENTIFIANT_CHAMBRE + chambre.Id);
+            Console.WriteLine(CHAINE_IDENTIFIANT_HOTEL + " : " + chambre.Hotel.Id);
+            Console.WriteLine(CHAINE_IDENTIFIANT_CHAMBRE + " : " + chambre.Id);
             Console.WriteLine(CHAINE_RESULTAT_HOTEL + chambre.Hotel.Nom);
             Console.WriteLine(CHAINE_RESULTAT_VILLE + chambre.Hotel.Ville);
             Console.WriteLine(CHAINE_RESULTAT_RUE + chambre.Hotel.Rue);
@@ -172,7 +172,7 @@ namespace TP2
             int clientId = Agence.EnregistrerClient(nom, prenom, numeroCarte);
             int numeroReservation = Agence.Reserver(clientId, hotelId, chambreId, dateArrivee, dateDepart);
 
-            Console.WriteLine(CHAINE_NUMERO_RESERVATION + numeroReservation);
+            Console.WriteLine(CHAINE_NUMERO_RESERVATION + " : " + numeroReservation);
 
         }
 
@@ -180,7 +180,13 @@ namespace TP2
         {
             int numeroReservation = SaisirEntierPositif(CHAINE_NUMERO_RESERVATION, false);
 
-            string chaineReservation = Agence.ConsulterReservation(numeroReservation);
+            Reservation reservation = Agence.ConsulterReservation(numeroReservation);
+
+            string chaineReservation = "Réservation " + numeroReservation + " : \n";
+            chaineReservation += "* Client : " + reservation.ClientReservation.Nom + " " + reservation.ClientReservation.Prenom + "\n";
+            chaineReservation += "* Hotel : " + reservation.ChambreReservation.Hotel.Nom + "\n";
+            chaineReservation += "* Chambre : " + reservation.ChambreReservation.Nblit + " lits\n";
+            chaineReservation += "* Prix : " + reservation.ChambreReservation.Prix + "€\n";
 
             Console.WriteLine(chaineReservation);
         }

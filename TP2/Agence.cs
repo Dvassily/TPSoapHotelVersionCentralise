@@ -117,17 +117,9 @@ namespace TP2
             return id;
         }
 
-        public string ConsulterReservation(int numeroReservation)
+        public Reservation ConsulterReservation(int numeroReservation)
         {
-            Reservation reservation = _Reservations[numeroReservation];
-
-            string resultat = "Réservation " + numeroReservation + " : \n";
-            resultat += "* Client : " + reservation.ClientReservation.Nom + " " + reservation.ClientReservation.Prenom + "\n";
-            resultat += "* Hotel : " + reservation.ChambreReservation.Hotel.Nom + "\n";
-            resultat += "* Chambre : " + reservation.ChambreReservation.Nblit + " lits\n";
-            resultat += "* Prix : " + reservation.ChambreReservation.Prix + "€\n";
-
-            return resultat;            
+            return _Reservations[numeroReservation];         
         }
 
 
